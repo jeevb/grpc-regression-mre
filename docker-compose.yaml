@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  auth:
+    image: auth-service
+    build: ./auth
+
+  echo:
+    image: echo-service
+    build: ./echo
+    ports:
+      - 50051:50051
+
+  nginx:
+    image: nginx
+    ports:
+      - 8443:8443
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    secrets:
+      - server.crt
+      - server.key
+
+secrets:
+  server.crt:
+    file: ./cert/server.crt
+  server.key:
+    file: ./cert/server.key
